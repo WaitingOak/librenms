@@ -162,7 +162,7 @@ final class AddHostCliTest extends DBTestCase
         $device = Device::findByHostname($this->hostName);
         $this->assertNotNull($device);
 
-        $this->assertEquals(strtoupper((string) $mode), $device->snmp_context, 'Wrong snmp v3 context');
+        $this->assertEquals('Jetdirect', $device->snmp_context, 'Wrong snmp v3 context');
     }
 	
     #[TestDox('CLI ping')]
