@@ -29,6 +29,7 @@ if (isset($_POST['editing'])) {
                 $device->authlevel = $_POST['authlevel'];
                 $device->authname = $_POST['authname'];
                 $device->authpass = $_POST['authpass'];
+				$device->snmp_context = trim(strip_tags((string) ($_POST['snmp_context'] ?? ''))) ?: null;
                 $device->cryptoalgo = $_POST['cryptoalgo'];
                 $device->cryptopass = $_POST['cryptopass'];
             } elseif ($_POST['community'] != '********') {
@@ -49,7 +50,7 @@ if (isset($_POST['editing'])) {
         $device_updated = false;
 
         if ($force_save !== true && $snmp_enabled) {
-            $device_is_snmpable = app(DeviceIsSnmpable::class)->execute($device);
+            $device_is_snmpable = app(DeviceIsSnmpable::class)->execute($device, $device->snmpver == 'v3' ? $device->snmp_context : null);
         }
 
         if ($force_save === true || ! $snmp_enabled || $device_is_snmpable) {
@@ -353,6 +354,13 @@ if (! \LibreNMS\SNMPCapabilities::supportsAES256()) {
     echo '<label class="text-left"><small>Some options are disabled. <a href="https://docs.librenms.org/Support/FAQ/#optional-requirements-for-snmpv3-sha2-auth">Read more here</a></small></label>';
 }
     echo '
+    </div>
+    </div>
+	<div class="form-group">
+    <label for="snmp_context" class="col-sm-2 control-label">Context Name</label>
+    <div class="col-sm-4">
+    <input type="text" id="snmp_context" name="snmp_context" class="form-control" value="' . htmlspecialchars($device->snmp_context ?? '') . '" placeholder="optional" autocomplete="off">
+    <span class="help-block">Only set this if your device requires a context name, for example "Jetdirect" for HP LaserJet printers.</span>
     </div>
     </div>
     </div>';

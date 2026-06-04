@@ -51,6 +51,7 @@ class Device extends BaseModel
         'authname',
         'authpass',
         'community',
+		'snmp_context',
         'cryptoalgo',
         'cryptopass',
         'disable_notify',

@@ -7,10 +7,15 @@ use SnmpQuery;
 
 class DeviceIsSnmpable
 {
-    public function execute(Device $device): bool
+    public function execute(Device $device, ?string $context = null): bool
     {
-        $response = SnmpQuery::device($device)->get('SNMPv2-MIB::sysObjectID.0');
+        $query = SnmpQuery::device($device);
+        if ($device->snmpver === 'v3' && $context !== null && $context !== '') {
+            $query->context($context);
+        }
 
-        return $response->getExitCode() === 0 || $response->getExitCode() === 2 || $response->isValid();
+        $response = $query->get('SNMPv2-MIB::sysObjectID.0');
+
+        return $response->getExitCode() === 0 || $response->isValid();
     }
 }

@@ -151,7 +151,20 @@ final class AddHostCliTest extends DBTestCase
             $this->assertEquals(strtoupper((string) $mode), $device->cryptoalgo, 'Wrong snmp v3 crypt algorithm');
         }
     }
+	
+	#[TestDox('SNMP v3 context')]
+    public function testSnmpV3Context(): void
+    {
+        $this->artisan('device:add', ['device spec' => $this->hostName, '--force' => true, '--context' => 'Jetdirect', '--v3' => true])
+            ->assertExitCode(0)
+            ->execute();
 
+        $device = Device::findByHostname($this->hostName);
+        $this->assertNotNull($device);
+
+        $this->assertEquals(strtoupper((string) $mode), $device->snmp_context, 'Wrong snmp v3 context');
+    }
+	
     #[TestDox('CLI ping')]
     public function testCLIping(): void
     {

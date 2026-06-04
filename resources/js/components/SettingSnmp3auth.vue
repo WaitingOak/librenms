@@ -85,6 +85,14 @@
                         </div>
                     </div>
                 </fieldset>
+				
+				<div class="form-group">
+                    <label for="snmp_context" class="col-sm-3 control-label" v-text="$t('settings.settings.snmp.v3.fields.snmp_context')"></label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" id="snmp_context" :value="item.snmp_context" @input="updateItem(id, $event.target.id, $event.target.value)">
+                        <span class="help-block">Only set this if your device requires a context name, for example "Jetdirect" for HP LaserJet printers.</span>
+                    </div>
+                </div>
             </form>
                 </div>
             </div>
@@ -109,7 +117,7 @@ export default {
         data() {
             return {
                 localList: this.value,
-                authAlgorithms: ['MD5', 'AES'],
+                authAlgorithms: ['MD5', 'SHA'],
                 cryptoAlgorithms: ['AES', 'DES'],
             }
         },
@@ -124,6 +132,7 @@ export default {
                 this.localList.push({
                     authlevel: 'noAuthNoPriv',
                     authalgo: 'MD5',
+					snmp_context: '',
                     authname: '',
                     authpass: '',
                     cryptoalgo: 'AES',

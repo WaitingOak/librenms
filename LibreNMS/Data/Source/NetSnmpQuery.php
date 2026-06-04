@@ -342,7 +342,9 @@ class NetSnmpQuery implements SnmpQueryInterface
     {
         if ($this->device->snmpver === 'v3') {
             array_push($cmd, '-v3', '-l', $this->device->authlevel);
-            array_push($cmd, '-n', $this->context);
+            if ($this->context !== '') {
+                array_push($cmd, '-n', $this->context);
+            }
 
             switch (strtolower((string) $this->device->authlevel)) {
                 case 'authpriv':

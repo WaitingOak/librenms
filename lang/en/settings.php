@@ -2251,6 +2251,7 @@ return [
                     'authlevel' => 'Level',
                     'authname' => 'Username',
                     'authpass' => 'Password',
+					'snmp_context' => 'Context Name',
                     'cryptoalgo' => 'Algorithm',
                     'cryptopass' => 'Password',
                 ],

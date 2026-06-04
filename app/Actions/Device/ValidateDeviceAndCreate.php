@@ -110,7 +110,7 @@ class ValidateDeviceAndCreate
         $communities = array_unique($communities);
 
         $v3_credentials = LibrenmsConfig::get('snmp.v3');
-        array_unshift($v3_credentials, $this->device->only(['authlevel', 'authname', 'authpass', 'authalgo', 'cryptopass', 'cryptoalgo']));
+        array_unshift($v3_credentials, $this->device->only(['authlevel', 'authname', 'authpass', 'authalgo', 'cryptopass', 'cryptoalgo', 'snmp_context']));
         $v3_credentials = array_unique($v3_credentials, SORT_REGULAR);
 
         foreach ($snmp_versions as $snmp_version) {
@@ -119,9 +119,9 @@ class ValidateDeviceAndCreate
             if ($snmp_version === 'v3') {
                 // Try each set of parameters from config
                 foreach ($v3_credentials as $v3) {
-                    $this->device->fill(Arr::only($v3, ['authlevel', 'authname', 'authpass', 'authalgo', 'cryptopass', 'cryptoalgo']));
+                    $this->device->fill(Arr::only($v3, ['authlevel', 'authname', 'authpass', 'authalgo', 'cryptopass', 'cryptoalgo', 'snmp_context']));
 
-                    if (app(DeviceIsSnmpable::class)->execute($this->device)) {
+                    if (app(DeviceIsSnmpable::class)->execute($this->device, $this->device->snmp_context)) {
                         return;
                     } else {
                         $host_unreachable_exception->addReason($snmp_version, $this->device->authname . '/' . $this->device->authlevel);
@@ -162,9 +162,20 @@ class ValidateDeviceAndCreate
             $this->device->authalgo = null;
             $this->device->cryptopass = null;
             $this->device->cryptoalgo = null;
+			$this->device->snmp_context = null;
         }
     }
+	
+	private function snmpQuery(): SnmpQueryInterface
+    {
+        $query = SnmpQuery::device($this->device);
+        if ($this->device->snmpver === 'v3' && $this->device->snmp_context) {
+            $query->context($this->device->snmp_context);
+        }
 
+        return $query;
+    }
+	
     private function fillDefaults(): void
     {
         $this->device->port = $this->device->port ?: LibrenmsConfig::get('snmp.port', 161);
