@@ -2,9 +2,9 @@ name: Web
 
 on:
   push:
-    branches: [master, main]
+    branches: [master, main, SNMP-Context]
   pull_request:
-    branches: [master, main]
+    branches: [master, main, SNMP-Context]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
