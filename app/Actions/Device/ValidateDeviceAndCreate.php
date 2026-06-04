@@ -166,7 +166,7 @@ class ValidateDeviceAndCreate
         }
     }
 	
-	private function snmpQuery(): SnmpQueryInterface
+	/* private function snmpQuery(): SnmpQueryInterface
     {
         $query = SnmpQuery::device($this->device);
         if ($this->device->snmpver === 'v3' && $this->device->snmp_context) {
@@ -174,7 +174,7 @@ class ValidateDeviceAndCreate
         }
 
         return $query;
-    }
+    } */
 	
     private function fillDefaults(): void
     {
