@@ -42,6 +42,14 @@
 
                     </div>
                 </div>
+				
+				<div class="form-group">
+                    <label for="context_name" class="col-sm-3 control-label" v-text="$t('settings.settings.snmp.v3.fields.context_name')"></label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" id="context_name" :value="item.context_name" :disabled="disabled" @input="updateItem(id, $event.target.id, $event.target.value)">
+                        <span class="help-block" v-text="$t('settings.settings.snmp.v3.fields.context_help')"></span>
+                    </div>
+                </div>
 
                 <fieldset name="algo" v-show="item.authlevel.toString().substring(0, 4) === 'auth'" :disabled="disabled">
                     <legend class="h4" v-text="$t('settings.settings.snmp.v3.auth')"></legend>

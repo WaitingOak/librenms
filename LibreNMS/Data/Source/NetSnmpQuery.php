@@ -340,11 +340,12 @@ class NetSnmpQuery implements SnmpQueryInterface
 
     private function buildAuth(array &$cmd): void
     {
+		
         if ($this->device->snmpver === 'v3') {
             array_push($cmd, '-v3', '-l', $this->device->authlevel);
-            if ($this->context !== '') {
-                array_push($cmd, '-n', $this->context);
-            }
+			 if ($this->device->snmp_context !== '' && $this->device->snmp_context !== 'NULL') {
+				array_push($cmd, '-n', $this->device->snmp_context);
+			}
 
             switch (strtolower((string) $this->device->authlevel)) {
                 case 'authpriv':
